@@ -1,6 +1,6 @@
 services:
 
-  markshop-db:
+  markshop:
     image: postgres:latest
     container_name: markshop-postgres-db
     environment:
