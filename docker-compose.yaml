@@ -1,0 +1,18 @@
+services:
+
+  markshop:
+    image: postgres:latest
+    container_name: markshop-postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: markshop
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # Ensure the database is always running
+    restart: always
+
+volumes:
+  postgres_data:
