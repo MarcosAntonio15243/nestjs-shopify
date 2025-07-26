@@ -6,7 +6,7 @@ export const envSchema = z.object({
   SHOPIFY_API_KEY: z.string(),
   SHOPIFY_API_SECRET: z.string(),
   SHOPIFY_SCOPES: z.string(),
-  SHOPIFY_REDIRECT_URI: z.url(),
+  HOST: z.url(),
 });
 
 // Generate TypeScript type from the schema
