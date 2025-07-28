@@ -14,11 +14,7 @@ export class AuthController {
       throw new InternalServerErrorException('Shop parameter is missing. Please provide a shop name (e.g., ?shop=yourstore.myshopify.com)');
     }
 
-    console.log('Starting authentication...');
-
     const authUrl = this.authService.generateAuthUrl(shop);
-
-    console.log(`URL Generated: ${authUrl}, returning...`);
 
     return { url: authUrl };
   }
@@ -31,8 +27,6 @@ export class AuthController {
     if (!success) {
       throw new BadRequestException(error);
     };
-
-    console.log('I am redirect ' + data.code);
 
     await this.authService.exchangeCodeForToken(data);
 

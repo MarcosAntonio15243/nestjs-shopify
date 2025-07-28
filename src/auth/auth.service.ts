@@ -22,10 +22,6 @@ export class AuthService {
 
     const sanitizedShop = shop.replace(/(.myshopify.com)*$/, '.myshopify.com');
 
-    console.log(this.configService.get<string>('SHOPIFY_API_KEY'));
-    console.log(this.configService.get<string>('SHOPIFY_API_SECRET'));
-    console.log(this.configService.get<string>('HOST'));
-
     return `https://${sanitizedShop}/admin/oauth/authorize?` +
            `client_id=${this.configService.get<string>('SHOPIFY_API_KEY')}&` +
            `scope=${this.configService.get<string>('SHOPIFY_SCOPES')}&` +
@@ -52,10 +48,7 @@ export class AuthService {
       }),
     );
 
-    console.log(`Token recebido: ${JSON.stringify(response.data)}`);
-    // Token recebido: {"access_token":"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","scope":"write_orders"}
-
-    // Save shop name and token
+    // Save store name and token
     const result = await this.db.insert(schema.stores).values({
       name: data.shop.split('.')[0],
       accessToken: response.data.access_token
