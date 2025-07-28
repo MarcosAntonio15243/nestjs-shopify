@@ -37,7 +37,7 @@ export class AuthService {
     return `https://${sanitizedShop}/admin/oauth/authorize?` +
            `client_id=${this.configService.get<string>('SHOPIFY_API_KEY')}&` +
            `scope=${this.configService.get<string>('SHOPIFY_SCOPES')}&` +
-           `redirect_uri=${this.configService.get<string>('HOST')}&state={nonce}&grant_options[]={access_mode}`;
+           `redirect_uri=${this.configService.get<string>('HOST')}/auth/shopify/redirect&state={nonce}&grant_options[]={access_mode}`;
   }
 
   async exchangeCodeForToken(query: any): Promise<void> {
