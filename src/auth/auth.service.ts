@@ -1,27 +1,19 @@
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
+import { DRIZZLE } from 'src/drizzle/drizzle.module';
+import { schema } from 'src/drizzle/schema';
+import { DrizzleDB } from 'src/drizzle/types/types';
+import { OAuthRedirectDto, OAuthRedirectSchema } from './dto/oauth-redirect.dto';
 
 @Injectable()
 export class AuthService {
-  // private shopifyApiKey: string;
-  // private shopifyScopes: string;
-  // private shopifyRedirectUri: string;
-
   constructor(
     private configService: ConfigService,
-    private readonly httpService: HttpService
-  ) { // <-- Injete ConfigService
-    // this.shopifyApiKey = this.configService.get<string>('SHOPIFY_API_KEY') ?? 
-    //   (() => { throw new Error('SHOPIFY_API_KEY não definido'); })();
-
-    // this.shopifyScopes = this.configService.get<string>('SHOPIFY_SCOPES') ?? 
-    //   (() => { throw new Error('SHOPIFY_SCOPES não definido'); })();
-
-    // this.shopifyRedirectUri = this.configService.get<string>('SHOPIFY_REDIRECT_URI') ?? 
-    //   (() => { throw new Error('SHOPIFY_REDIRECT_URI não definido'); })();
-  }
+    private readonly httpService: HttpService,
+    @Inject(DRIZZLE) private db: DrizzleDB
+  ) {}
 
   generateAuthUrl(shop: string): string {
     if (!shop) {
@@ -40,13 +32,18 @@ export class AuthService {
            `redirect_uri=${this.configService.get<string>('HOST')}/auth/shopify/redirect&state={nonce}&grant_options[]={access_mode}`;
   }
 
-  async exchangeCodeForToken(query: any): Promise<void> {
-    const url = `https://${query.shop}/admin/oauth/access_token`;
+  async exchangeCodeForToken(query: OAuthRedirectDto): Promise<void> {
+    const { success, data, error } = OAuthRedirectSchema.safeParse(query);
+    if (!success) {
+      throw new BadRequestException(error);
+    };
+
+    const url = `https://${data.shop}/admin/oauth/access_token`;
 
     const payload = {
       client_id: this.configService.get<string>('SHOPIFY_API_KEY'),
       client_secret: this.configService.get<string>('SHOPIFY_API_SECRET'),
-      code: query.code,
+      code: data.code,
     };
 
     const response = await lastValueFrom(
@@ -56,8 +53,17 @@ export class AuthService {
     );
 
     console.log(`Token recebido: ${JSON.stringify(response.data)}`);
+    // Token recebido: {"access_token":"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","scope":"write_orders"}
 
-    // TODO: Salvar no banco: shop, access_token, escopo, etc.
+    // Save shop name and token
+    const result = await this.db.insert(schema.stores).values({
+      name: data.shop.split('.')[0],
+      accessToken: response.data.access_token
+    }).returning();
+
+    if (!result[0]) {
+      throw new BadRequestException("Failed to save store data on redirect");
+    };
   }
 
 }

@@ -1,5 +1,6 @@
-import { Controller, Get, HttpCode, InternalServerErrorException, Query, Redirect } from '@nestjs/common';
+import { BadRequestException, Controller, Get, HttpCode, InternalServerErrorException, Query, Redirect } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { OAuthRedirectDto, OAuthRedirectSchema } from './dto/oauth-redirect.dto';
 
 @Controller('auth/shopify')
 export class AuthController {
@@ -25,27 +26,17 @@ export class AuthController {
   @Get('redirect')
   @HttpCode(302)
   @Redirect() // Decorador do NestJS para lidar com redirecionamentos HTTP 302
-  async oauthRedirect(@Query() query: any) {
-    console.log('I am redirect ' + query.code);
-    
-    // const response = await lastValueFrom(
-    //   this.httpService.post(
-    //     `https://${query.shop}/admin/oauth/access_token`,
-    //     {
-    //       client_id: this.configService.get("SHOPIFY_API_KEY"),
-    //       client_secret: this.configService.get("SHOPIFY_API_SECRET"),
-    //       code: query.code
-    //     },
-    //   ),
-    // );
+  async oauthRedirect(@Query() query: OAuthRedirectDto) {
+    const { success, data, error } = OAuthRedirectSchema.safeParse(query);
+    if (!success) {
+      throw new BadRequestException(error);
+    };
 
-    // console.log("Token response: " + String(response.data));
-    // console.log("Token response 2: " + response.data.access_token);
-    // // SAVE TOKEN HERE
+    console.log('I am redirect ' + data.code);
 
-    await this.authService.exchangeCodeForToken(query);
+    await this.authService.exchangeCodeForToken(data);
 
-    return { url: `https://${query.shop}/admin/apps?shop=${query.shop}` };
+    return { url: `https://${data.shop}/admin/apps?shop=${data.shop}` };
   }
   
 }
