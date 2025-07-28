@@ -6,6 +6,7 @@ export const envSchema = z.object({
   SHOPIFY_API_KEY: z.string(),
   SHOPIFY_API_SECRET: z.string(),
   SHOPIFY_SCOPES: z.string(),
+  SHOPIFY_API_VERSION: z.string(),
   HOST: z.url(),
 });
 
@@ -14,6 +15,7 @@ export const envSchema = z.object({
 // 
 // type Env = {
 //   PORT: number;
+//   ...
 // };
 // 
 export type Env = z.infer<typeof envSchema>;

@@ -28,7 +28,9 @@ export class AuthController {
       throw new BadRequestException(error);
     };
 
-    await this.authService.exchangeCodeForToken(data);
+    const accessToken = await this.authService.exchangeCodeForToken(data);
+
+    await this.authService.webhookSubscription(data.shop, accessToken);
 
     return { url: `https://${data.shop}/admin/apps?shop=${data.shop}` };
   }

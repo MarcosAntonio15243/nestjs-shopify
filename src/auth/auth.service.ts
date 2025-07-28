@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { lastValueFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { DRIZZLE } from 'src/drizzle/drizzle.module';
 import { schema } from 'src/drizzle/schema';
 import { DrizzleDB } from 'src/drizzle/types/types';
@@ -28,7 +28,7 @@ export class AuthService {
            `redirect_uri=${this.configService.get<string>('HOST')}/auth/shopify/redirect&state={nonce}&grant_options[]={access_mode}`;
   }
 
-  async exchangeCodeForToken(query: OAuthRedirectDto): Promise<void> {
+  async exchangeCodeForToken(query: OAuthRedirectDto): Promise<string> {
     const { success, data, error } = OAuthRedirectSchema.safeParse(query);
     if (!success) {
       throw new BadRequestException(error);
@@ -48,15 +48,49 @@ export class AuthService {
       }),
     );
 
+    const accessToken = response.data.access_token;
+
     // Save store name and token
     const result = await this.db.insert(schema.stores).values({
       name: data.shop.split('.')[0],
-      accessToken: response.data.access_token
+      accessToken: accessToken
     }).returning();
 
     if (!result[0]) {
       throw new BadRequestException("Failed to save store data on redirect");
     };
+
+    return accessToken;
+  }
+
+  async webhookSubscription(shop: string, accessToken: string) {
+    const url = `https://${shop}/admin/api/2025-07/webhooks.json`;
+
+    const payload = {
+      "webhook": {
+         // Will always send request after create orders
+        "address": `${this.configService.get<string>('HOST')}/webhooks/orders/create`,
+        "topic": "orders/create",
+        "format": "json",
+      },
+    };
+
+    try {
+      const response = await firstValueFrom(
+        this.httpService.post(url, payload, {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Shopify-Access-Token': accessToken
+          }
+        })
+      );
+      console.log(response.data);
+      
+      return response.data;
+    } catch (error: any) {
+      throw new HttpException(`Erro ao registrar inscrição da loja ${shop} no webhook: ${error.message}`, HttpStatus.BAD_REQUEST);
+    }
+    
   }
 
 }
