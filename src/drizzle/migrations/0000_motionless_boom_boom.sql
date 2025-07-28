@@ -1,6 +1,6 @@
 CREATE TABLE "store" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
-	"access_token" text NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL
+	"accessToken" text NOT NULL,
+	"createdAt" timestamp DEFAULT now() NOT NULL
 );

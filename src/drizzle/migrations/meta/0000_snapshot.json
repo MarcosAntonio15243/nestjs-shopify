@@ -1,5 +1,5 @@
 {
-  "id": "91fb7fbf-e2b9-41f5-8c4d-af4f9aa55ee2",
+  "id": "3c74ca0a-5f51-48e7-ab41-ef2e91d42eb8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -21,14 +21,14 @@
           "primaryKey": false,
           "notNull": true
         },
-        "access_token": {
-          "name": "access_token",
+        "accessToken": {
+          "name": "accessToken",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "created_at": {
-          "name": "created_at",
+        "createdAt": {
+          "name": "createdAt",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
