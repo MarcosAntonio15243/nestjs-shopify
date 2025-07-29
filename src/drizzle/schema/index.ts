@@ -1,4 +1,4 @@
-import { stores } from './shop';
+import { stores } from './stores';
 
 export const schema = {
   stores
