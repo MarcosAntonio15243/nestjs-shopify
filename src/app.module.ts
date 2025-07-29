@@ -5,9 +5,8 @@ import { EnvModule } from './env/env.module';
 import { ConfigModule } from '@nestjs/config';
 import { envSchema } from './env/env';
 import { DrizzleModule } from './drizzle/drizzle.module';
-import { AuthController } from './auth/auth.controller';
-import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
+import { WebhooksModule } from './webhooks/webhooks.module';
 
 @Module({
   imports: [
@@ -18,6 +17,7 @@ import { AuthModule } from './auth/auth.module';
     EnvModule,
     DrizzleModule,
     AuthModule,
+    WebhooksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
