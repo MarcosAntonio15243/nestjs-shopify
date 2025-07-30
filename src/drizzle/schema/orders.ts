@@ -1,9 +1,9 @@
-import { integer, numeric, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
-import { stores } from "./stores";
+import { bigint, numeric, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+// import { stores } from "./stores";
 
 export const orders = pgTable('orders', {
   id: uuid('id').primaryKey().defaultRandom(),
-  idShopify: integer().notNull(),
+  idShopify: bigint({ mode: "number" }).notNull(),
   financialStatus: text(),
   createdAt: timestamp({ withTimezone: true }).notNull(),
   updatedAt: timestamp({ withTimezone: true }).notNull(),
@@ -15,7 +15,4 @@ export const orders = pgTable('orders', {
   gateway: text(),
   note: text(),
   tags: text(),
-  storeId: uuid()
-    .references(() => stores.id)
-    .notNull()
 });
