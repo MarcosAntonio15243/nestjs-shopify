@@ -18,13 +18,8 @@ export class WebhooksController {
     @Req() req: Request,
     @Res() res: Response
   ) {
-
     const rawBody = req['rawBody'];
     const SHOPIFY_API_SECRET = this.configService.get("SHOPIFY_API_SECRET");
-
-    console.log(`Inicando validação hmac: ${hmac}`);
-    console.log(`raw body: ${rawBody}`);
-    console.log(`secret: ${SHOPIFY_API_SECRET}`);
 
     const isValid = this.webhooksService.validateHmac(rawBody, hmac, SHOPIFY_API_SECRET);
 
@@ -33,8 +28,8 @@ export class WebhooksController {
     }
 
     const orderData = JSON.parse(rawBody.toString('utf8'));
-    // Save in DB
-    console.log(orderData);
+
+    // Persist order
     this.webhooksService.saveOrder(orderData);
 
     return res.status(HttpStatus.OK).send('Webhook received and validated.');
