@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1753727651466,
-      "tag": "0000_motionless_boom_boom",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1753832647602,
-      "tag": "0001_lucky_sabra",
+      "when": 1753895419886,
+      "tag": "0000_smart_namor",
       "breakpoints": true
     }
   ]

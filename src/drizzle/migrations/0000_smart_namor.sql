@@ -1,6 +1,6 @@
 CREATE TABLE "orders" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"idShopify" integer NOT NULL,
+	"idShopify" bigint NOT NULL,
 	"financialStatus" text,
 	"createdAt" timestamp with time zone NOT NULL,
 	"updatedAt" timestamp with time zone NOT NULL,
@@ -11,8 +11,12 @@ CREATE TABLE "orders" (
 	"totalDiscounts" numeric,
 	"gateway" text,
 	"note" text,
-	"tags" text,
-	"storeId" uuid NOT NULL
+	"tags" text
 );
 --> statement-breakpoint
-ALTER TABLE "orders" ADD CONSTRAINT "orders_storeId_store_id_fk" FOREIGN KEY ("storeId") REFERENCES "public"."store"("id") ON DELETE no action ON UPDATE no action;
+CREATE TABLE "store" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"name" text NOT NULL,
+	"accessToken" text NOT NULL,
+	"createdAt" timestamp DEFAULT now() NOT NULL
+);
