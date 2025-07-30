@@ -32,9 +32,10 @@ export class WebhooksController {
       return res.status(HttpStatus.UNAUTHORIZED).send('HMAC validation failed.');
     }
 
-    const webhookData = JSON.parse(rawBody.toString('utf8'));
+    const orderData = JSON.parse(rawBody.toString('utf8'));
     // Save in DB
-    console.log(webhookData);
+    console.log(orderData);
+    this.webhooksService.saveOrder(orderData);
 
     return res.status(HttpStatus.OK).send('Webhook received and validated.');
   }
