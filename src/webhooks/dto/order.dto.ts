@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { CustomerDTO, customerSchema } from './customer.dto';
+import { orderItemSchema } from './orderItem.dto';
 
 export const orderSchema = z.object({
   id: z.coerce.number(),
@@ -14,7 +15,8 @@ export const orderSchema = z.object({
   gateway: z.string(),
   note: z.string().nullable(),
   tags: z.string(),
-  customer: customerSchema
+  customer: customerSchema,
+  line_items: z.array(orderItemSchema)
 });
 
 export type OrderDTO = z.infer<typeof orderSchema>;
