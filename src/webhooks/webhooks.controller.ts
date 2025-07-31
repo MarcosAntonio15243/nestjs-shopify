@@ -19,14 +19,6 @@ export class WebhooksController {
     @Res() res: Response
   ) {
     const rawBody = req['rawBody'];
-    const SHOPIFY_API_SECRET = this.configService.get("SHOPIFY_API_SECRET");
-
-    const isValid = this.webhooksService.validateHmac(rawBody, hmac, SHOPIFY_API_SECRET);
-
-    if (!isValid) {
-      return res.status(HttpStatus.UNAUTHORIZED).send('HMAC validation failed.');
-    }
-
     const orderData = JSON.parse(rawBody.toString('utf8'));
 
     // Persist order

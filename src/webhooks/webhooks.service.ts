@@ -11,24 +11,9 @@ import { OrderItemDTO } from './dto/orderItem.dto';
 export class WebhooksService {
   constructor(@Inject(DRIZZLE) private db: DrizzleDB) {}
 
-  validateHmac(rawBody: Buffer, hmacHeader: string, secret: string): boolean {
-    const generatedHmac = crypto
-      .createHmac('sha256', secret)
-      .update(rawBody)
-      .digest('base64');
-
-    return crypto.timingSafeEqual(
-      Buffer.from(generatedHmac),
-      Buffer.from(hmacHeader)
-    );
-  }
-
   async saveOrder(order: OrderDTO) {
     let customer_id: string | null = null;
 
-    console.log(order);
-    
-    
     if (order.customer) {
       let [customer] = await this.db.select({
           id: schema.customers.id
