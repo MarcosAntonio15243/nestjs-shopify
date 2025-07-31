@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CustomerDTO, customerSchema } from './customer.dto';
+import { customerSchema } from './customer.dto';
 import { orderItemSchema } from './orderItem.dto';
 
 export const orderSchema = z.object({
@@ -16,7 +16,19 @@ export const orderSchema = z.object({
   note: z.string().nullable(),
   tags: z.string(),
   customer: customerSchema,
-  line_items: z.array(orderItemSchema)
+  line_items: z.array(orderItemSchema),
+  // Address info
+  shipping_address: z.object({
+    first_name: z.string(),
+    last_name: z.string(),
+    address1: z.string(),
+    address2: z.string().optional().nullable(),
+    city: z.string(),
+    province: z.string().optional().nullable(),
+    zip: z.string(),
+    country: z.string(),
+    phone: z.string().optional().nullable(),
+  }).optional().nullable(),
 });
 
 export type OrderDTO = z.infer<typeof orderSchema>;

@@ -25,6 +25,9 @@ export class WebhooksService {
 
   async saveOrder(order: OrderDTO) {
     let customer_id: string | null = null;
+
+    console.log(order);
+    
     
     if (order.customer) {
       let [customer] = await this.db.select({
@@ -65,7 +68,17 @@ export class WebhooksService {
       gateway: order.gateway,
       note: order.note,
       tags: order.tags,
-      customerId: customer_id
+      customerId: customer_id,
+      // Address info
+      shippingFirstName: order.shipping_address?.first_name,
+      shippingLastName: order.shipping_address?.last_name,
+      shippingAddress1: order.shipping_address?.address1,
+      shippingAddress2: order.shipping_address?.address2,
+      shippingCity: order.shipping_address?.city,
+      shippingProvince: order.shipping_address?.province,
+      shippingZip: order.shipping_address?.zip,
+      shippingCountry: order.shipping_address?.country,
+      shippingPhone: order.shipping_address?.phone,
     }).returning();
 
     const insertedOrder = result2[0];

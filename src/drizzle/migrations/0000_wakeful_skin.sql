@@ -13,7 +13,7 @@ CREATE TABLE "orderItems" (
 	"productId" bigint NOT NULL,
 	"variantId" bigint NOT NULL,
 	"name" text NOT NULL,
-	"sky" text,
+	"sku" text,
 	"quantity" integer,
 	"price" numeric,
 	"orderId" uuid NOT NULL
@@ -33,7 +33,16 @@ CREATE TABLE "orders" (
 	"gateway" text,
 	"note" text,
 	"tags" text,
-	"customerId" uuid
+	"customerId" uuid,
+	"shippingFirstName" text,
+	"shippingLastName" text,
+	"shippingAddress1" text,
+	"shippingAddress2" text,
+	"shippingCity" text,
+	"shippingProvince" text,
+	"shippingZip" text,
+	"shippingCountry" text,
+	"shippingPhone" text
 );
 --> statement-breakpoint
 CREATE TABLE "store" (
@@ -43,5 +52,5 @@ CREATE TABLE "store" (
 	"createdAt" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-ALTER TABLE "orderItems" ADD CONSTRAINT "orderItems_orderId_orders_id_fk" FOREIGN KEY ("orderId") REFERENCES "public"."orders"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "orderItems" ADD CONSTRAINT "orderItems_orderId_orders_id_fk" FOREIGN KEY ("orderId") REFERENCES "public"."orders"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "orders" ADD CONSTRAINT "orders_customerId_customers_id_fk" FOREIGN KEY ("customerId") REFERENCES "public"."customers"("id") ON DELETE set null ON UPDATE no action;

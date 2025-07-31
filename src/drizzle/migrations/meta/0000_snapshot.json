@@ -1,5 +1,5 @@
 {
-  "id": "e240c07e-a874-4e58-9471-a4cc862d40f2",
+  "id": "c18ad360-0a7e-44ff-a8e1-0b60961536f9",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -89,8 +89,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "sky": {
-          "name": "sky",
+        "sku": {
+          "name": "sku",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -126,7 +126,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -222,6 +222,60 @@
         "customerId": {
           "name": "customerId",
           "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shippingFirstName": {
+          "name": "shippingFirstName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shippingLastName": {
+          "name": "shippingLastName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shippingAddress1": {
+          "name": "shippingAddress1",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shippingAddress2": {
+          "name": "shippingAddress2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shippingCity": {
+          "name": "shippingCity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shippingProvince": {
+          "name": "shippingProvince",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shippingZip": {
+          "name": "shippingZip",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shippingCountry": {
+          "name": "shippingCountry",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shippingPhone": {
+          "name": "shippingPhone",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         }

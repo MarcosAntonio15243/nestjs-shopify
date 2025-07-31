@@ -16,5 +16,15 @@ export const orders = pgTable('orders', {
   note: text(),
   tags: text(),
   customerId: uuid()
-    .references(() => customers.id, { onDelete: "set null" })
+    .references(() => customers.id, { onDelete: "set null" }),
+  // Address info
+  shippingFirstName: text(),
+  shippingLastName: text(),
+  shippingAddress1: text(),
+  shippingAddress2: text(),
+  shippingCity: text(),
+  shippingProvince: text(),
+  shippingZip: text(),
+  shippingCountry: text(),
+  shippingPhone: text() 
 });
