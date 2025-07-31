@@ -5,6 +5,7 @@ import { DrizzleDB } from 'src/drizzle/types/types';
 import { OrderDTO } from './dto/order.dto';
 import { schema } from 'src/drizzle/schema';
 import { eq } from 'drizzle-orm';
+import { OrderItemDTO } from './dto/orderItem.dto';
 
 @Injectable()
 export class WebhooksService {
@@ -71,6 +72,25 @@ export class WebhooksService {
     if (!insertedOrder) {
       throw new BadRequestException('Failed to persist order data');
     }
+
+    await this.saveOrderItems(insertedOrder.id, order.line_items);
+  }
+
+  private async saveOrderItems(orderId: string, orderItems: OrderItemDTO[]) {
+    if (!orderId || !orderItems?.length) return;
+
+    const itemsToInsert = orderItems.map(item => ({
+      idShopify: item.id,
+      productId: item.product_id,
+      variantId: item.variant_id,
+      name: item.name,
+      sku: item.sku,
+      quantity: item.quantity,
+      price: item.price,
+      orderId: orderId
+    }));
+
+    await this.db.insert(schema.orderItems).values(itemsToInsert);
   }
 
 }
