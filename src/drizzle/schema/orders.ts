@@ -15,6 +15,6 @@ export const orders = pgTable('orders', {
   gateway: text(),
   note: text(),
   tags: text(),
-  customerId: uuid('customer_id')
+  customerId: uuid()
     .references(() => customers.id, { onDelete: "set null" })
 });
