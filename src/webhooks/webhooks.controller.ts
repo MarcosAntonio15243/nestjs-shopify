@@ -2,7 +2,7 @@ import { Controller, Headers, HttpStatus, Post, Req, Res, UseInterceptors } from
 import { WebhooksService } from './webhooks.service';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { ShopifyHmacInterceptor } from 'src/common/interceptors/shopify-hmac.interceptor';
+import { ShopifyHmacInterceptor } from '../common/interceptors/shopify-hmac.interceptor';
 
 @Controller('webhooks')
 export class WebhooksController {

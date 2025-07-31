@@ -2,9 +2,9 @@ import { HttpService } from '@nestjs/axios';
 import { BadRequestException, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
-import { DRIZZLE } from 'src/drizzle/drizzle.module';
-import { schema } from 'src/drizzle/schema';
-import { DrizzleDB } from 'src/drizzle/types/types';
+import { DRIZZLE } from '../drizzle/drizzle.module';
+import { schema } from '../drizzle/schema';
+import { DrizzleDB } from '../drizzle/types/types';
 import { OAuthRedirectDto, OAuthRedirectSchema } from './dto/oauth-redirect.dto';
 
 @Injectable()
