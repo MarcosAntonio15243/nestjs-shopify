@@ -7,10 +7,10 @@ export const orderItems = pgTable('orderItems', {
   productId: bigint({ mode: "number" }).notNull(),
   variantId: bigint({ mode: "number" }).notNull(),
   name: text().notNull(),
-  sky: text(),
+  sku: text(),
   quantity: integer(),
   price: numeric(),
   orderId: uuid()
-    .references(() => orders.id, { onDelete: "set null" })
+    .references(() => orders.id)
     .notNull()
 });
