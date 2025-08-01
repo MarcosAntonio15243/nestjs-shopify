@@ -1,5 +1,5 @@
 {
-  "id": "04a1f0b2-19d9-4a8f-bebb-7cc25198c58f",
+  "id": "0857ddf7-3b25-400f-95e5-feb1da1ac851",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -54,8 +54,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.orderItems": {
-      "name": "orderItems",
+    "public.order_items": {
+      "name": "order_items",
       "schema": "",
       "columns": {
         "id": {
@@ -116,9 +116,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "orderItems_orderId_orders_id_fk": {
-          "name": "orderItems_orderId_orders_id_fk",
-          "tableFrom": "orderItems",
+        "order_items_orderId_orders_id_fk": {
+          "name": "order_items_orderId_orders_id_fk",
+          "tableFrom": "order_items",
           "tableTo": "orders",
           "columnsFrom": [
             "orderId"
