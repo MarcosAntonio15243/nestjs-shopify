@@ -1,98 +1,212 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🛍️ Shopify Orders Webhook Integration (NestJS + Drizzle + Docker)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este projeto é uma API desenvolvida em **NestJS** com **Drizzle ORM** e **PostgreSQL**, com o objetivo de integrar com a **API da Shopify**. Ele realiza a autenticação OAuth de lojas Shopify e recebe **webhooks de criação de pedidos (orders/create)**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Sumário
 
-## Description
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Pré-requisitos](#pré-requisitos)
+- [Configuração inicial na Shopify](#configuração-inicial-na-shopify)
+- [Configurando um domínio público (ngrok ou alternativo)](#configurando-um-domínio-público-ngrok-ou-alternativo)
+- [Configuração do Projeto](#configuração-do-projeto)
+- [Rodando o Projeto](#rodando-o-projeto)
+  - [Opção 1: Usando Docker](#opção-1-usando-docker)
+  - [Opção 2: Usando Node.js/NPM](#opção-2-usando-nodejsnpm)
+- [Testando a Integração](#testando-a-integração)
+- [Webhooks Suportados](#webhooks-suportados)
+- [(Opcional) Visualizando Dados Salvos no Banco)](#opcional-visualizando-dados-salvos-no-banco)
+- [Estrutura do Projeto](#estrutura-do-projeto)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tecnologias Utilizadas
 
-## Project setup
+- [NestJS](https://nestjs.com/) - Um framework Node.js progressivo para criar aplicativos do lado do servidor eficientes, confiáveis e escaláveis.
+- [Drizzle ORM](https://orm.drizzle.team/) - Type-safe operations on the database.
+- [Shopify API](https://shopify.dev/docs/api) - APIs REST/GraphQL da Shopify utilizadas para autenticação OAuth e recepção de webhooks de pedidos.
+- [Ngrok](https://ngrok.com/) - Túnel para expor a API local publicamente.
+- [PostgreSQL](https://www.postgresql.org/) - Banco de dados relacional para persistência.
+- [Docker](https://www.docker.com/) - Containerização da aplicação e do banco de dados.
+- [Zod](https://zod.dev/) - Robust schema and data validation typescript first.
 
-```bash
-$ npm install
+## Pré-requisitos
+
+Antes de começar, você precisará ter instalado:
+
+- [Node.js (>= 18.x)](https://nodejs.org)
+- [Docker e Docker Compose](https://docs.docker.com/compose/install/)
+- [[Ngrok](https://ngrok.com/) ou alternativa como [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/)] para expor sua API local
+- Conta de desenvolvedor na [Shopify](https://partners.shopify.com/)
+
+## Configuração Inicial na Shopify
+
+1. Acesse [Shopify Partners](https://partners.shopify.com/) e crie uma conta ou acesse a sua.
+
+2. Crie um **app customizado**:
+    - Vá em **Apps** → **Create app** → **Custom App**.
+    - Escolha um nome, por exemplo: `Webhook Orders App`.
+
+3. Gere as credenciais:
+    - Salve o **API Key** (client ID) e **API Secret** para o arquivo `.env`.
+
+4. Crie uma **loja de teste**:
+    - Vá em **Lojas** → **Adicionar Loja** → **Criar loja de desenvolvimento**.
+    - Escolha um nome e confirme a criação.
+
+7. Instale o app na loja de teste:
+    - Vá em **Apps** e selecine o app criado.
+    - Em seguida, vá para **Distribuição** e selecione **Domínio personalizado**.
+    - Insira o link da sua loja de teste (exemplo: `nome-da-loja.myshopify.com`).
+    - Copie o link de instalação gerado e abra-o em uma aba em seu navegador. 
+    - Confirme a instalação do app na sua loja.
+
+## Configurando um Domínio Público (Ngrok ou Alternativo)
+
+Para exemplificação, será demonstrado utilizando o **Ngrok**.
+
+Antes de rodar o projeto:
+
+1. Instale o [Ngrok](https://ngrok.com/) e rode:
+
+    ```bash
+    ngrok http 3000
+    ```
+   
+2. Copie a URL gerada (https://abcd1234.ngrok.io).
+
+3. Aplique-o:
+   
+    - No .env do projeto:
+
+      ```env
+      HOST=https://abcd1234.ngrok.io
+      ```
+  
+    - No painel do app da Shopify:
+      - Atualize o campo App URL e Redirect URL com essa mesma URL.
+      
+      > Lembre-se de manter **App URL** com `https://<dominio-ngrok>/auth/shopify` e **Redirect URL** com `https://<dominio-ngrok>/auth/shopify/redirect`.
+
+## Configuração do Projeto
+
+1. Crie um arquivo .env baseado no .env.example:
+
+```env
+# Server Configuration
+PORT=3000 # HTTP server port
+
+# Database Connection
+DATABASE_HOST=nestshop-db         # e.g., service name in docker-compose.yml
+DATABASE_USER=postgres            # your DB username
+DATABASE_PASSWORD=postgres        # your DB password
+DATABASE_PORT=5432                # default PostgreSQL port
+DATABASE_NAME=nestshop            # your DB name
+# Format: postgresql://USER:PASSWORD@HOST:PORT/DATABASE_NAME?schema=public
+DATABASE_URL=postgresql://postgres:postgres@nestshop-db:5432/nestshop?schema=public
+
+# Shopify App Credentials
+SHOPIFY_API_KEY=your_api_key_here
+SHOPIFY_API_SECRET=your_api_secret_here
+SHOPIFY_SCOPES=read_products,write_orders
+SHOPIFY_API_VERSION=2025-07 # Shopify API version
+
+# Public App URL (Ngrok or Custom Domain)
+HOST=https://your-ngrok-subdomain.ngrok-free.app
 ```
 
-## Compile and run the project
+2. (Opcional) Caso desejar visualizar os dados salvos no banco você pode utilizar a ferramenta [Drizzle Studio](https://orm.drizzle.team/drizzle-studio/overview) do Drizzle Kit. Para isso, crie um `.env.studio` com:
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```env
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/nestshop?schema=public
 ```
 
-## Run tests
+> Observação: Observe que a URL é semelhante à do `.env` porém muda-se o `DATABASE_HOST`, cujo valor padrão é `nestshop-db`, mas no Drizzle Studio deve ser `localhost` para que esse consiga se conectar com o banco.
+
+## Rodando o Projeto
+
+### Opção 1: Usando Docker
+
+> Recomendado para ambientes de desenvolvimento isolado.
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+docker-compose up --build
 ```
 
-## Deployment
+### Opção 2: Usando Node.js/NPM
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+- Instale dependências:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+  ```bash
+  npm install
+  ```
+
+- Inicie o banco via Docker:
+
+  ```bash
+  docker-compose up -d postgres
+  ```
+
+- Aplique as migrações:
+
+  ```bash
+  npm run db:migrate
+  ```
+
+- Rode o projeto:
+
+  ```bash
+  npm run start:dev
+  ```
+
+## Testando a Integração
+
+1. Acesse a área de administrador da sua loja de teste criada:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+https://admin.shopify.com/store/nome-loja-teste
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+2. Crie um produto e um pedido para esse (você pode tentar também criar um cliente e endereço de entrega para testar com os dados completos).
 
-## Resources
+3. A Shopify começará a enviar webhooks para:
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+POST https://abcd1234.ngrok.io/webhooks/orders/create
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## Webhooks Suportados
 
-## Support
+Atualmente, este projeto escuta apenas:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- `orders/create`: Recebe informações de novos pedidos realizados na loja.
 
-## Stay in touch
+## (Opcional) Visualizando Dados Salvos no Banco
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Caso você tenha criado um `.env.studio` e configurado a `DATABASE_URL` para o **Drizzle Studio**, você pode visualizar os dados salvos no banco executando, em um novo terminal na raiz do projeto, o comando:
 
-## License
+```bash
+npm run db:studio
+```
+Abra o Drizzle Studio em [https://local.drizzle.studio]().
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## Estrutura do Projeto
+
+```bash
+src/
+├── auth/                 # Módulo de autenticação OAuth com Shopify
+│   └── dto/              # Data Transfer Objects usados pelos métodos de autenticação
+├── common/               # Código compartilhado
+│   └── interceptors/     # Interceptadores reutilizáveis (ex: validação HMAC)
+├── drizzle/              # Configuração do Drizzle ORM
+│   ├── migrations/       # Arquivos de migração do banco de dados
+│   ├── schema/           # Esquemas das tabelas do banco
+│   └── types/            # Tipos TypeScript relacionados ao banco
+│   ...
+├── env/                  # Validação de variáveis de ambiente com zod
+├── webhooks/             # Módulo de recebimento e tratamento dos webhooks da Shopify
+│   └── dto/              # Data Transfer Objects usados pelos webhooks
+│   ...
+├── app.module.ts
+├── main.ts
+.env
+docker-compose.yml
+```
+
