@@ -1,18 +1,47 @@
 services:
 
-  markshop:
+  nestshop-db:
     image: postgres:latest
-    container_name: markshop-postgres-db
+    container_name: nestshop-postgres-db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: markshop
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
     ports:
-      - "5432:5432"
+      - "${DATABASE_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     # Ensure the database is always running
     restart: always
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DATABASE_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  nest-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nest-app
+    container_name: nest-app
+    restart: always
+    ports:
+      - "${PORT}:3000"
+    depends_on:
+      nestshop-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      SHOPIFY_API_KEY: ${SHOPIFY_API_KEY}
+      SHOPIFY_API_SECRET: ${SHOPIFY_API_SECRET}
+      SHOPIFY_SCOPES: ${SHOPIFY_SCOPES}
+      SHOPIFY_API_VERSION: ${SHOPIFY_API_VERSION}
+      HOST: ${HOST}
+    env_file:
+      - .env
+    command: >
+      sh -c "npm run db:push && npm run start:prod"
 
 volumes:
   postgres_data:
