@@ -2,6 +2,12 @@ import { CustomerDTO } from "../dto/shopify-customer.dto";
 import { OrderDTO } from "../dto/shopify-order.dto";
 import { OrderItemDTO } from "../dto/shopify-order-item.dto";
 
+/**
+ * Maps a Shopify order (DTO) to the database format.
+ * @param orderFromShopify The order object received from Shopify.
+ * @param customerId Optional customer ID to associate with the order.
+ * @returns An object formatted for insertion into the orders table.
+ */
 export function mapShopifyOrderToDb(orderFromShopify: OrderDTO, customerId: string | null = null) {
   return {
     id_shopify: Number(orderFromShopify.id),
@@ -29,6 +35,11 @@ export function mapShopifyOrderToDb(orderFromShopify: OrderDTO, customerId: stri
   };
 }
 
+/**
+ * Maps a Shopify customer (DTO) to the database format.
+ * @param customerFromShopify The customer object received from Shopify.
+ * @returns An object formatted for insertion into the customers table.
+ */
 export function mapShopifyCustomerToDb(customerFromShopify: CustomerDTO) {
   return {
     id_shopify: customerFromShopify.id,
@@ -39,6 +50,12 @@ export function mapShopifyCustomerToDb(customerFromShopify: CustomerDTO) {
   };
 }
 
+/**
+ * Maps a Shopify order item (DTO) to the database format.
+ * @param orderItemFromShopify The order item object received from Shopify.
+ * @param orderId The internal order ID to associate with the item.
+ * @returns An object formatted for insertion into the order_items table.
+ */
 export function mapShopifyOrderItemToDb(orderItemFromShopify: OrderItemDTO, orderId: string) {
   return {
     id_shopify: orderItemFromShopify.id,
