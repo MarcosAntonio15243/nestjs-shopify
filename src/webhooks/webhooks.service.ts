@@ -1,10 +1,10 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { DRIZZLE } from '../drizzle/drizzle.module';
 import { DrizzleDB } from '../drizzle/types/types';
-import { OrderDTO } from './dto/order.dto';
+import { OrderDTO } from '../common/dto/order.dto';
 import { schema } from '../drizzle/schema';
 import { eq } from 'drizzle-orm';
-import { OrderItemDTO } from './dto/orderItem.dto';
+import { OrderItemDTO } from '../common/dto/orderItem.dto';
 
 @Injectable()
 export class WebhooksService {
