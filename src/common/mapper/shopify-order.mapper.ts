@@ -1,6 +1,8 @@
-import { OrderDTO } from "../dto/order.dto";
+import { CustomerDTO } from "../dto/shopify-customer.dto";
+import { OrderDTO } from "../dto/shopify-order.dto";
+import { OrderItemDTO } from "../dto/shopify-order-item.dto";
 
-export function mapShopifyOrderToDb(orderFromShopify: OrderDTO) {
+export function mapShopifyOrderToDb(orderFromShopify: OrderDTO, customerId: string | null = null) {
   return {
     id_shopify: Number(orderFromShopify.id),
     financial_status: orderFromShopify.financial_status,
@@ -14,7 +16,7 @@ export function mapShopifyOrderToDb(orderFromShopify: OrderDTO) {
     gateway: orderFromShopify.gateway,
     note: orderFromShopify.note,
     tags: orderFromShopify.tags,
-    customer_id: null, // ou associe com base no cliente da Shopify
+    customer_id: customerId,
     shipping_first_name: orderFromShopify.shipping_address?.first_name,
     shipping_last_name: orderFromShopify.shipping_address?.last_name,
     shipping_address_1: orderFromShopify.shipping_address?.address1,
@@ -24,5 +26,28 @@ export function mapShopifyOrderToDb(orderFromShopify: OrderDTO) {
     shipping_zip: orderFromShopify.shipping_address?.zip,
     shipping_country: orderFromShopify.shipping_address?.country,
     shipping_phone: orderFromShopify.shipping_address?.phone,
+  };
+}
+
+export function mapShopifyCustomerToDb(customerFromShopify: CustomerDTO) {
+  return {
+    id_shopify: customerFromShopify.id,
+    email: customerFromShopify.email,
+    first_name: customerFromShopify.first_name,
+    last_name: customerFromShopify.last_name,
+    phone: customerFromShopify.phone
+  };
+}
+
+export function mapShopifyOrderItemToDb(orderItemFromShopify: OrderItemDTO, orderId: string) {
+  return {
+    id_shopify: orderItemFromShopify.id,
+    product_id: orderItemFromShopify.product_id,
+    variant_id: orderItemFromShopify.variant_id,
+    name: orderItemFromShopify.name,
+    sku: orderItemFromShopify.sku,
+    quantity: orderItemFromShopify.quantity,
+    price: orderItemFromShopify.price,
+    order_id: orderId
   };
 }
