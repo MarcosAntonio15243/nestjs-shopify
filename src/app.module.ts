@@ -7,6 +7,7 @@ import { envSchema } from './env/env';
 import { DrizzleModule } from './drizzle/drizzle.module';
 import { AuthModule } from './auth/auth.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     DrizzleModule,
     AuthModule,
     WebhooksModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

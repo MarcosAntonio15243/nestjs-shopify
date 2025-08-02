@@ -12,6 +12,7 @@ This project is an API developed using **NestJS** with **Drizzle ORM** and **Pos
 - [Running the Project](#running-the-project)
   - [Option 1: Using Docker](#option-1-using-docker)
   - [Option 2: Using Node.js/NPM](#option-2-using-nodejsnpm)
+- [API Endpoints](#api-endpoints)
 - [Testing the Integration](#testing-the-integration)
 - [Supported Webhooks](#supported-webhooks)
 - [(Optional) Viewing Saved Data in the Database](#-optional-viewing-saved-data-in-the-database)
@@ -165,6 +166,22 @@ docker-compose up --build
   ```bash
   npm run start:dev
   ```
+
+## API Endpoints
+
+You can explore and test the available API endpoints using the documentation below.
+
+The default base URL is usually one of the following, depending on your setup:
+
+- Local development: `http://localhost:3000`
+- Ngrok (or similar tunnel): `https://your-ngrok-subdomain.ngrok.io`
+- Custom domain: `https://your-custom-domain.com`
+
+- `GET /health` - Verifies if the API is running properly.
+- `GET /auth/shopify` - Starts the Shopify OAuth authentication flow.
+- `GET /auth/shopify/redirect` - Handles the OAuth redirect after authentication.
+- `POST /webhooks/orders/create` - Receives Shopify order creation webhooks.
+- `GET /orders` - Retrieves all saved orders with details.
 
 ## Testing the Integration
 
