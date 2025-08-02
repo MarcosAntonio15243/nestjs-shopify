@@ -1,0 +1,34 @@
+import { z } from 'zod';
+import { customerSchema } from './shopify-customer.dto';
+import { orderItemSchema } from './shopify-order-item.dto';
+
+export const orderSchema = z.object({
+  id: z.coerce.number(),
+  financial_status: z.string(),
+  created_at: z.coerce.string(),
+  updated_at: z.coerce.string(),
+  currency: z.string(),
+  total_price: z.string(),
+  subtotal_price: z.string(),
+  total_tax: z.string(),
+  total_discounts: z.string(),
+  gateway: z.string(),
+  note: z.string().nullable(),
+  tags: z.string(),
+  customer: customerSchema,
+  line_items: z.array(orderItemSchema),
+  // Address info
+  shipping_address: z.object({
+    first_name: z.string(),
+    last_name: z.string(),
+    address1: z.string(),
+    address2: z.string().optional().nullable(),
+    city: z.string(),
+    province: z.string().optional().nullable(),
+    zip: z.string(),
+    country: z.string(),
+    phone: z.string().optional().nullable(),
+  }).optional().nullable(),
+});
+
+export type OrderDTO = z.infer<typeof orderSchema>;
