@@ -1,93 +1,93 @@
 # 🛍️ Shopify Orders Webhook Integration (NestJS + Drizzle + Docker)
 
-Este projeto é uma API desenvolvida em **NestJS** com **Drizzle ORM** e **PostgreSQL**, com o objetivo de integrar com a **API da Shopify**. Ele realiza a autenticação OAuth de lojas Shopify e recebe **webhooks de criação de pedidos (orders/create)**.
+This project is an API developed using **NestJS** with **Drizzle ORM** and **PostgreSQL**, designed to integrate with the **Shopify API**. It handles OAuth authentication for Shopify stores and receives **order creation webhooks (orders/create)**.
 
-## Sumário
+## Table of Contents
 
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Pré-requisitos](#pré-requisitos)
-- [Configuração inicial na Shopify](#configuração-inicial-na-shopify)
-- [Configurando um domínio público (ngrok ou alternativo)](#configurando-um-domínio-público-ngrok-ou-alternativo)
-- [Configuração do Projeto](#configuração-do-projeto)
-- [Rodando o Projeto](#rodando-o-projeto)
-  - [Opção 1: Usando Docker](#opção-1-usando-docker)
-  - [Opção 2: Usando Node.js/NPM](#opção-2-usando-nodejsnpm)
-- [Testando a Integração](#testando-a-integração)
-- [Webhooks Suportados](#webhooks-suportados)
-- [(Opcional) Visualizando Dados Salvos no Banco)](#opcional-visualizando-dados-salvos-no-banco)
-- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Technologies Used](#technologies-used)
+- [Prerequisites](#prerequisites)
+- [Initial Setup on Shopify](#initial-setup-on-shopify)
+- [Setting Up a Public Domain (ngrok or alternative)](#setting-up-a-public-domain-ngrok-or-alternative)
+- [Project Configuration](#project-configuration)
+- [Running the Project](#running-the-project)
+  - [Option 1: Using Docker](#option-1-using-docker)
+  - [Option 2: Using Node.js/NPM](#option-2-using-nodejsnpm)
+- [Testing the Integration](#testing-the-integration)
+- [Supported Webhooks](#supported-webhooks)
+- [(Optional) Viewing Saved Data in the Database](#-optional-viewing-saved-data-in-the-database)
+- [Project Structure](#project-structure)
 
-## Tecnologias Utilizadas
+## Technologies Used
 
-- [NestJS](https://nestjs.com/) - Um framework Node.js progressivo para criar aplicativos do lado do servidor eficientes, confiáveis e escaláveis.
+- [NestJS](https://nestjs.com/) - A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
 - [Drizzle ORM](https://orm.drizzle.team/) - Type-safe operations on the database.
-- [Shopify API](https://shopify.dev/docs/api) - APIs REST/GraphQL da Shopify utilizadas para autenticação OAuth e recepção de webhooks de pedidos.
-- [Ngrok](https://ngrok.com/) - Túnel para expor a API local publicamente.
-- [PostgreSQL](https://www.postgresql.org/) - Banco de dados relacional para persistência.
-- [Docker](https://www.docker.com/) - Containerização da aplicação e do banco de dados.
-- [Zod](https://zod.dev/) - Robust schema and data validation typescript first.
+- [Shopify API](https://shopify.dev/docs/api) - Shopify’s REST/GraphQL APIs used for OAuth authentication and order webhooks.
+- [Ngrok](https://ngrok.com/) - Tunnel to expose your local API to the internet.
+- [PostgreSQL](https://www.postgresql.org/) - Relational database for data persistence.
+- [Docker](https://www.docker.com/) - Containerization for the application and database.
+- [Zod](https://zod.dev/) - TypeScript-first schema and data validation.
 
-## Pré-requisitos
+## Prerequisites
 
-Antes de começar, você precisará ter instalado:
+Before getting started, make sure you have:
 
 - [Node.js (>= 18.x)](https://nodejs.org)
-- [Docker e Docker Compose](https://docs.docker.com/compose/install/)
-- [[Ngrok](https://ngrok.com/) ou alternativa como [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/)] para expor sua API local
-- Conta de desenvolvedor na [Shopify](https://partners.shopify.com/)
+- [Docker and Docker Compose](https://docs.docker.com/compose/install/)
+- [[Ngrok](https://ngrok.com/) or an alternative like [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/)]  to expose your local API
+- A developer account on [Shopify](https://partners.shopify.com/)
 
-## Configuração Inicial na Shopify
+## Initial Setup on Shopify
 
-1. Acesse [Shopify Partners](https://partners.shopify.com/) e crie uma conta ou acesse a sua.
+1. Go to [Shopify Partners](https://partners.shopify.com/) and log in or create an account.
 
-2. Crie um **app customizado**:
-    - Vá em **Apps** → **Create app** → **Custom App**.
-    - Escolha um nome, por exemplo: `Webhook Orders App`.
+2. Create a **custom app**:
+    - Navigate to **Apps** → **Create app** → **Custom App**.
+    - Choose a name, for example: `Webhook Orders App`.
 
-3. Gere as credenciais:
-    - Salve o **API Key** (client ID) e **API Secret** para o arquivo `.env`.
+3. Generate credentials:
+    - Save the **API Key** (client ID) and **API Secret** into the .env file.
 
-4. Crie uma **loja de teste**:
-    - Vá em **Lojas** → **Adicionar Loja** → **Criar loja de desenvolvimento**.
-    - Escolha um nome e confirme a criação.
+4. Create a **test store**:
+    - Go to **Stores** → **Add store** → **Create development store**.
+    - Choose a name and confirm creation.
 
-7. Instale o app na loja de teste:
-    - Vá em **Apps** e selecine o app criado.
-    - Em seguida, vá para **Distribuição** e selecione **Domínio personalizado**.
-    - Insira o link da sua loja de teste (exemplo: `nome-da-loja.myshopify.com`).
-    - Copie o link de instalação gerado e abra-o em uma aba em seu navegador. 
-    - Confirme a instalação do app na sua loja.
+5. Install the app in the test store:
+    - Go to **Apps** and select the created app.
+    - Then go to **Distribution** and select **Custom domain**.
+    - Enter your test store URL (e.g., `store-name.myshopify.com`).
+    - Copy the generated installation link and open it in a browser tab.
+    - Confirm the app installation in your test store.
 
-## Configurando um Domínio Público (Ngrok ou Alternativo)
+## Setting Up a Public Domain (Ngrok or Alternative)
 
-Para exemplificação, será demonstrado utilizando o **Ngrok**.
+For demonstration purposes, **Ngrok** will be used.
 
-Antes de rodar o projeto:
+Before running the project:
 
-1. Instale o [Ngrok](https://ngrok.com/) e rode:
+1. Install [Ngrok](https://ngrok.com/) and run:
 
     ```bash
     ngrok http 3000
     ```
    
-2. Copie a URL gerada (https://abcd1234.ngrok.io).
+2. Copy the generated URL (e.g., `https://abcd1234.ngrok.io`).
 
-3. Aplique-o:
+3. Apply it:
    
-    - No .env do projeto:
+    - In the project’s `.env` file:
 
       ```env
       HOST=https://abcd1234.ngrok.io
       ```
   
-    - No painel do app da Shopify:
-      - Atualize o campo App URL e Redirect URL com essa mesma URL.
+    - In the Shopify app dashboard:
+      - Update the **App URL** and **Redirect URL** fields with this URL.
       
-      > Lembre-se de manter **App URL** com `https://<dominio-ngrok>/auth/shopify` e **Redirect URL** com `https://<dominio-ngrok>/auth/shopify/redirect`.
+      > Remember to set **App URL** as `https://<ngrok-domain>/auth/shopify` and **Redirect URL** as `https://<ngrok-domain>/auth/shopify/redirect`.
 
-## Configuração do Projeto
+## Project Configuration
 
-1. Crie um arquivo .env baseado no .env.example:
+1. Create a `.env` file based on `.env.example`:
 
 ```env
 # Server Configuration
@@ -112,97 +112,98 @@ SHOPIFY_API_VERSION=2025-07 # Shopify API version
 HOST=https://your-ngrok-subdomain.ngrok-free.app
 ```
 
-2. (Opcional) Caso desejar visualizar os dados salvos no banco você pode utilizar a ferramenta [Drizzle Studio](https://orm.drizzle.team/drizzle-studio/overview) do Drizzle Kit. Para isso, crie um `.env.studio` com:
+2. (Optional) If you want to view the saved data using [Drizzle Studio](https://orm.drizzle.team/drizzle-studio/overview), create a `.env.studio` file:
 
 ```env
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/nestshop?schema=public
 ```
 
-> Observação: Observe que a URL é semelhante à do `.env` porém muda-se o `DATABASE_HOST`, cujo valor padrão é `nestshop-db`, mas no Drizzle Studio deve ser `localhost` para que esse consiga se conectar com o banco.
+> **Note**: The URL is similar to the one in `.env`, but the `DATABASE_HOST` changes from `nestshop-db` to `localhost` so Drizzle Studio can connect locally.
 
-## Rodando o Projeto
+## Running the Project
 
-### Opção 1: Usando Docker
+### Option 1: Using Docker
 
-> Recomendado para ambientes de desenvolvimento isolado.
+> Recommended for isolated development environments.
 
 ```bash
 docker-compose up --build
 ```
 
-### Opção 2: Usando Node.js/NPM
+### Option 2: Using Node.js/NPM
 
-- Instale dependências:
+- Install dependencies:
 
   ```bash
   npm install
   ```
 
-- Inicie o banco via Docker:
+- Start the database via Docker:
 
   ```bash
   docker-compose up -d postgres
   ```
 
-- Aplique as migrações:
+- Apply the migrations:
 
   ```bash
   npm run db:migrate
   ```
 
-- Rode o projeto:
+- Run the project:
 
   ```bash
   npm run start:dev
   ```
 
-## Testando a Integração
+## Testing the Integration
 
-1. Acesse a área de administrador da sua loja de teste criada:
+1. Access the admin panel of your test store:
 
 ```bash
 https://admin.shopify.com/store/nome-loja-teste
 ```
 
-2. Crie um produto e um pedido para esse (você pode tentar também criar um cliente e endereço de entrega para testar com os dados completos).
+2. Create a product and an order for it (you may also create a customer and shipping address to test with complete data).
 
-3. A Shopify começará a enviar webhooks para:
+3. Shopify will start sending webhooks to:
 
 ```bash
 POST https://abcd1234.ngrok.io/webhooks/orders/create
 ```
 
-## Webhooks Suportados
+## Supported Webhooks
 
-Atualmente, este projeto escuta apenas:
+Currently, this project only listens to:
 
-- `orders/create`: Recebe informações de novos pedidos realizados na loja.
+- `orders/create`: Receives information about new orders placed in the store.
 
-## (Opcional) Visualizando Dados Salvos no Banco
+## (Optional) Viewing Saved Data in the Database
 
-Caso você tenha criado um `.env.studio` e configurado a `DATABASE_URL` para o **Drizzle Studio**, você pode visualizar os dados salvos no banco executando, em um novo terminal na raiz do projeto, o comando:
+If you created a `.env.studio` file and configured the `DATABASE_URL` for **Drizzle Studio**, you can view the saved data by running the following command from the project root in a new terminal:
 
 ```bash
 npm run db:studio
 ```
-Abra o Drizzle Studio em [https://local.drizzle.studio]().
 
-## Estrutura do Projeto
+Then open Drizzle Studio at [https://local.drizzle.studio]().
+
+## Project Structure
 
 ```bash
 src/
-├── auth/                 # Módulo de autenticação OAuth com Shopify
-│   └── dto/              # Data Transfer Objects usados pelos métodos de autenticação
-├── common/               # Código compartilhado
-│   └── interceptors/     # Interceptadores reutilizáveis (ex: validação HMAC)
-├── drizzle/              # Configuração do Drizzle ORM
-│   ├── migrations/       # Arquivos de migração do banco de dados
-│   ├── schema/           # Esquemas das tabelas do banco
-│   └── types/            # Tipos TypeScript relacionados ao banco
+├── auth/                 # OAuth authentication module with Shopify
+│   └── dto/              # Data Transfer Objects used by the auth methods
+├── common/               # Shared code
+│   └── interceptors/     # Reusable interceptors (e.g., HMAC validation)
+├── drizzle/              # Drizzle ORM configuration
+│   ├── migrations/       # Database migration files
+│   ├── schema/           # Database table schemas
+│   └── types/            # TypeScript types related to the database
 │   ...
-├── env/                  # Validação de variáveis de ambiente com zod
-├── webhooks/             # Módulo de recebimento e tratamento dos webhooks da Shopify
-│   └── dto/              # Data Transfer Objects usados pelos webhooks
+├── env/                  # Environment variable validation using zod
+├── webhooks/             # Shopify webhooks receiving and handling module
+│   └── dto/              # Data Transfer Objects used by the webhooks
 │   ...
 ├── app.module.ts
 ├── main.ts
@@ -210,3 +211,10 @@ src/
 docker-compose.yml
 ```
 
+## Author
+
+Made by [Marcos Antonio](https://github.com/MarcosAntonio15243).
+
+- 💻 Full Stack developer dedicated to building complete solutions by combining modern, functional user interfaces with robust back-end architectures.
+- 🚀 Always open to feedback, collaboration, or ideas for improvement!
+- 📫 Feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/marcos-antonio-18059b234) or check out more of my projects here on GitHub.
