@@ -18,14 +18,18 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:generate": "drizzle-kit generate --config ./src/drizzle/drizzle.config.ts",
+    "db:migrate": "drizzle-kit migrate --config ./src/drizzle/drizzle.config.ts",
+    "db:push": "drizzle-kit push --config ./src/drizzle/drizzle.config.ts",
+    "db:studio": "env $(cat .env.studio | grep -v '^#' | xargs) drizzle-kit studio --config ./src/drizzle/drizzle.config.ts"
   },
   "dependencies": {
+    "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "axios": "^1.11.0",
     "drizzle-orm": "^0.44.3",
     "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
