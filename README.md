@@ -204,8 +204,11 @@ Then open Drizzle Studio at [https://local.drizzle.studio]().
 src/
 ├── auth/                 # OAuth authentication module with Shopify
 │   └── dto/              # Data Transfer Objects used by the auth methods
+│   ...
 ├── common/               # Shared code
-│   └── interceptors/     # Reusable interceptors (e.g., HMAC validation)
+│   ├── dto/              # Reusable DTOs shared across modules (e.g., Shopify Webhooks)
+│   ├── interceptors/     # Reusable interceptors (e.g., HMAC validation)
+│   └── mapper/           # Functions to transform and map external data (e.g., Shopify → DB format)
 ├── drizzle/              # Drizzle ORM configuration
 │   ├── migrations/       # Database migration files
 │   ├── schema/           # Database table schemas
@@ -213,8 +216,6 @@ src/
 │   ...
 ├── env/                  # Environment variable validation using zod
 ├── webhooks/             # Shopify webhooks receiving and handling module
-│   └── dto/              # Data Transfer Objects used by the webhooks
-│   ...
 ├── app.module.ts
 ├── main.ts
 .env
