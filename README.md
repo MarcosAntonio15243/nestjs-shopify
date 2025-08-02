@@ -141,10 +141,20 @@ docker-compose up --build
 - Start the database via Docker:
 
   ```bash
-  docker-compose up -d postgres
+  docker-compose up -d nestshop-db
   ```
 
+  >  **Note**: `nestshop-db` is the service name defined for the database in the `docker-compose.yml` file.
+
 - Apply the migrations:
+
+  To apply the database migrations locally (outside Docker), make sure to update your `.env` or `.env.studio` file to use `localhost` instead of the Docker hostname (`nestshop-db`) in the `DATABASE_URL`. For example:
+
+  ```bash
+  DATABASE_URL=postgresql://postgres:postgres@localhost:5432/nestshop?schema=public
+  ```
+
+  Then run:
 
   ```bash
   npm run db:migrate
@@ -194,8 +204,11 @@ Then open Drizzle Studio at [https://local.drizzle.studio]().
 src/
 ├── auth/                 # OAuth authentication module with Shopify
 │   └── dto/              # Data Transfer Objects used by the auth methods
+│   ...
 ├── common/               # Shared code
-│   └── interceptors/     # Reusable interceptors (e.g., HMAC validation)
+│   ├── dto/              # Reusable DTOs shared across modules (e.g., Shopify Webhooks)
+│   ├── interceptors/     # Reusable interceptors (e.g., HMAC validation)
+│   └── mapper/           # Functions to transform and map external data (e.g., Shopify → DB format)
 ├── drizzle/              # Drizzle ORM configuration
 │   ├── migrations/       # Database migration files
 │   ├── schema/           # Database table schemas
@@ -203,8 +216,6 @@ src/
 │   ...
 ├── env/                  # Environment variable validation using zod
 ├── webhooks/             # Shopify webhooks receiving and handling module
-│   └── dto/              # Data Transfer Objects used by the webhooks
-│   ...
 ├── app.module.ts
 ├── main.ts
 .env

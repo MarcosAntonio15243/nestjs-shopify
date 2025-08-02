@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { customerSchema } from './customer.dto';
-import { orderItemSchema } from './orderItem.dto';
+import { customerSchema } from './shopify-customer.dto';
+import { orderItemSchema } from './shopify-order-item.dto';
 
 export const orderSchema = z.object({
   id: z.coerce.number(),

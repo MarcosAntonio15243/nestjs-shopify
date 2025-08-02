@@ -3,28 +3,28 @@ import { customers } from "./customers";
 
 export const orders = pgTable('orders', {
   id: uuid('id').primaryKey().defaultRandom(),
-  idShopify: bigint({ mode: "number" }).notNull(),
-  financialStatus: text(),
-  createdAt: timestamp({ withTimezone: true }).notNull(),
-  updatedAt: timestamp({ withTimezone: true }).notNull(),
+  id_shopify: bigint({ mode: "number" }).notNull(),
+  financial_status: text(),
+  created_at: timestamp({ withTimezone: true }).notNull(),
+  updated_at: timestamp({ withTimezone: true }).notNull(),
   currency: text(),
-  totalPrice: numeric().notNull(),
-  subtotalPrice: numeric(),
-  totalTax: numeric(),
-  totalDiscounts: numeric(),
+  total_price: numeric().notNull(),
+  subtotal_price: numeric(),
+  total_tax: numeric(),
+  total_discounts: numeric(),
   gateway: text(),
   note: text(),
   tags: text(),
-  customerId: uuid()
+  customer_id: uuid()
     .references(() => customers.id, { onDelete: "set null" }),
   // Address info
-  shippingFirstName: text(),
-  shippingLastName: text(),
-  shippingAddress1: text(),
-  shippingAddress2: text(),
-  shippingCity: text(),
-  shippingProvince: text(),
-  shippingZip: text(),
-  shippingCountry: text(),
-  shippingPhone: text() 
+  shipping_first_name: text(),
+  shipping_last_name: text(),
+  shipping_address_1: text(),
+  shipping_address_2: text(),
+  shipping_city: text(),
+  shipping_province: text(),
+  shipping_zip: text(),
+  shipping_country: text(),
+  shipping_phone: text() 
 });

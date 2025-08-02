@@ -1,5 +1,5 @@
 {
-  "id": "0857ddf7-3b25-400f-95e5-feb1da1ac851",
+  "id": "13c92a36-135a-44f5-88dd-d73501f9d127",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -15,8 +15,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "idShopify": {
-          "name": "idShopify",
+        "id_shopify": {
+          "name": "id_shopify",
           "type": "bigint",
           "primaryKey": false,
           "notNull": true
@@ -27,14 +27,14 @@
           "primaryKey": false,
           "notNull": true
         },
-        "firstName": {
-          "name": "firstName",
+        "first_name": {
+          "name": "first_name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "lastName": {
-          "name": "lastName",
+        "last_name": {
+          "name": "last_name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -65,20 +65,20 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "idShopify": {
-          "name": "idShopify",
+        "id_shopify": {
+          "name": "id_shopify",
           "type": "bigint",
           "primaryKey": false,
           "notNull": true
         },
-        "productId": {
-          "name": "productId",
+        "product_id": {
+          "name": "product_id",
           "type": "bigint",
           "primaryKey": false,
           "notNull": true
         },
-        "variantId": {
-          "name": "variantId",
+        "variant_id": {
+          "name": "variant_id",
           "type": "bigint",
           "primaryKey": false,
           "notNull": true
@@ -107,8 +107,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "orderId": {
-          "name": "orderId",
+        "order_id": {
+          "name": "order_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -116,12 +116,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "order_items_orderId_orders_id_fk": {
-          "name": "order_items_orderId_orders_id_fk",
+        "order_items_order_id_orders_id_fk": {
+          "name": "order_items_order_id_orders_id_fk",
           "tableFrom": "order_items",
           "tableTo": "orders",
           "columnsFrom": [
-            "orderId"
+            "order_id"
           ],
           "columnsTo": [
             "id"
@@ -147,26 +147,26 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "idShopify": {
-          "name": "idShopify",
+        "id_shopify": {
+          "name": "id_shopify",
           "type": "bigint",
           "primaryKey": false,
           "notNull": true
         },
-        "financialStatus": {
-          "name": "financialStatus",
+        "financial_status": {
+          "name": "financial_status",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true
@@ -177,26 +177,26 @@
           "primaryKey": false,
           "notNull": false
         },
-        "totalPrice": {
-          "name": "totalPrice",
+        "total_price": {
+          "name": "total_price",
           "type": "numeric",
           "primaryKey": false,
           "notNull": true
         },
-        "subtotalPrice": {
-          "name": "subtotalPrice",
+        "subtotal_price": {
+          "name": "subtotal_price",
           "type": "numeric",
           "primaryKey": false,
           "notNull": false
         },
-        "totalTax": {
-          "name": "totalTax",
+        "total_tax": {
+          "name": "total_tax",
           "type": "numeric",
           "primaryKey": false,
           "notNull": false
         },
-        "totalDiscounts": {
-          "name": "totalDiscounts",
+        "total_discounts": {
+          "name": "total_discounts",
           "type": "numeric",
           "primaryKey": false,
           "notNull": false
@@ -219,62 +219,62 @@
           "primaryKey": false,
           "notNull": false
         },
-        "customerId": {
-          "name": "customerId",
+        "customer_id": {
+          "name": "customer_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },
-        "shippingFirstName": {
-          "name": "shippingFirstName",
+        "shipping_first_name": {
+          "name": "shipping_first_name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "shippingLastName": {
-          "name": "shippingLastName",
+        "shipping_last_name": {
+          "name": "shipping_last_name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "shippingAddress1": {
-          "name": "shippingAddress1",
+        "shipping_address_1": {
+          "name": "shipping_address_1",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "shippingAddress2": {
-          "name": "shippingAddress2",
+        "shipping_address_2": {
+          "name": "shipping_address_2",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "shippingCity": {
-          "name": "shippingCity",
+        "shipping_city": {
+          "name": "shipping_city",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "shippingProvince": {
-          "name": "shippingProvince",
+        "shipping_province": {
+          "name": "shipping_province",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "shippingZip": {
-          "name": "shippingZip",
+        "shipping_zip": {
+          "name": "shipping_zip",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "shippingCountry": {
-          "name": "shippingCountry",
+        "shipping_country": {
+          "name": "shipping_country",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "shippingPhone": {
-          "name": "shippingPhone",
+        "shipping_phone": {
+          "name": "shipping_phone",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -282,12 +282,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "orders_customerId_customers_id_fk": {
-          "name": "orders_customerId_customers_id_fk",
+        "orders_customer_id_customers_id_fk": {
+          "name": "orders_customer_id_customers_id_fk",
           "tableFrom": "orders",
           "tableTo": "customers",
           "columnsFrom": [
-            "customerId"
+            "customer_id"
           ],
           "columnsTo": [
             "id"
@@ -319,14 +319,14 @@
           "primaryKey": false,
           "notNull": true
         },
-        "accessToken": {
-          "name": "accessToken",
+        "access_token": {
+          "name": "access_token",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,

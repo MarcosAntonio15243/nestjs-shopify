@@ -5,7 +5,6 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ShopifyHmacInterceptor implements NestInterceptor {
-  private readonly logger = new Logger(ShopifyHmacInterceptor.name);
   constructor(private configService: ConfigService) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {

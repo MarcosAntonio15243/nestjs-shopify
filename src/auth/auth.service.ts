@@ -53,7 +53,7 @@ export class AuthService {
     // Save store name and token
     const result = await this.db.insert(schema.stores).values({
       name: data.shop.split('.')[0],
-      accessToken: accessToken
+      access_token: accessToken
     }).returning();
 
     if (!result[0]) {

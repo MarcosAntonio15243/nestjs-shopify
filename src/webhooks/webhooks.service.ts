@@ -1,10 +1,11 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { DRIZZLE } from '../drizzle/drizzle.module';
 import { DrizzleDB } from '../drizzle/types/types';
-import { OrderDTO } from './dto/order.dto';
+import { OrderDTO } from '../common/dto/shopify-order.dto';
 import { schema } from '../drizzle/schema';
 import { eq } from 'drizzle-orm';
-import { OrderItemDTO } from './dto/orderItem.dto';
+import { OrderItemDTO } from '../common/dto/shopify-order-item.dto';
+import { mapShopifyCustomerToDb, mapShopifyOrderItemToDb, mapShopifyOrderToDb } from 'src/common/mapper/shopify-order.mapper';
 
 @Injectable()
 export class WebhooksService {
@@ -18,16 +19,10 @@ export class WebhooksService {
           id: schema.customers.id
         })
         .from(schema.customers)
-        .where(eq(schema.customers.idShopify, order.customer.id));
+        .where(eq(schema.customers.id_shopify, order.customer.id));
       
       if (!customer) {
-        const result1 = await this.db.insert(schema.customers).values({
-          idShopify: order.customer.id,
-          email: order.customer.email,
-          firstName: order.customer.first_name,
-          lastName: order.customer.last_name,
-          phone: order.customer.phone
-        }).returning({ id: schema.customers.id });
+        const result1 = await this.db.insert(schema.customers).values(mapShopifyCustomerToDb(order.customer)).returning({ id: schema.customers.id });
 
         customer = result1[0];
 
@@ -39,31 +34,7 @@ export class WebhooksService {
       customer_id = customer.id;
     }
     
-    const result2 = await this.db.insert(schema.orders).values({
-      idShopify: order.id,
-      financialStatus: order.financial_status,
-      createdAt: new Date(order.created_at),
-      updatedAt: new Date(order.updated_at),
-      currency: order.currency,
-      totalPrice: order.total_price,
-      subtotalPrice: order.subtotal_price,
-      totalTax: order.total_tax,
-      totalDiscounts: order.total_discounts,
-      gateway: order.gateway,
-      note: order.note,
-      tags: order.tags,
-      customerId: customer_id,
-      // Address info
-      shippingFirstName: order.shipping_address?.first_name,
-      shippingLastName: order.shipping_address?.last_name,
-      shippingAddress1: order.shipping_address?.address1,
-      shippingAddress2: order.shipping_address?.address2,
-      shippingCity: order.shipping_address?.city,
-      shippingProvince: order.shipping_address?.province,
-      shippingZip: order.shipping_address?.zip,
-      shippingCountry: order.shipping_address?.country,
-      shippingPhone: order.shipping_address?.phone,
-    }).returning();
+    const result2 = await this.db.insert(schema.orders).values(mapShopifyOrderToDb(order, customer_id)).returning();
 
     const insertedOrder = result2[0];
     if (!insertedOrder) {
@@ -76,16 +47,7 @@ export class WebhooksService {
   private async saveOrderItems(orderId: string, orderItems: OrderItemDTO[]) {
     if (!orderId || !orderItems?.length) return;
 
-    const itemsToInsert = orderItems.map(item => ({
-      idShopify: item.id,
-      productId: item.product_id,
-      variantId: item.variant_id,
-      name: item.name,
-      sku: item.sku,
-      quantity: item.quantity,
-      price: item.price,
-      orderId: orderId
-    }));
+    const itemsToInsert = orderItems.map(item => mapShopifyOrderItemToDb(item, orderId));
 
     await this.db.insert(schema.orderItems).values(itemsToInsert);
   }
