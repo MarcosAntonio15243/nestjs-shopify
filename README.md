@@ -141,10 +141,20 @@ docker-compose up --build
 - Start the database via Docker:
 
   ```bash
-  docker-compose up -d postgres
+  docker-compose up -d nestshop-db
   ```
 
+  >  **Note**: `nestshop-db` is the service name defined for the database in the `docker-compose.yml` file.
+
 - Apply the migrations:
+
+  To apply the database migrations locally (outside Docker), make sure to update your `.env` or `.env.studio` file to use `localhost` instead of the Docker hostname (`nestshop-db`) in the `DATABASE_URL`. For example:
+
+  ```bash
+  DATABASE_URL=postgresql://postgres:postgres@localhost:5432/nestshop?schema=public
+  ```
+
+  Then run:
 
   ```bash
   npm run db:migrate
