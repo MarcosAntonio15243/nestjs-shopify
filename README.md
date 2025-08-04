@@ -70,6 +70,8 @@ Before running the project:
     ```bash
     ngrok http 3000
     ```
+
+    > **Note**: Port 3000 is just a common default used for NestJS apps. Replace it with the actual port your application is running on locally (e.g., ngrok http 3333 if your app runs on port 3333).
    
 2. Copy the generated URL (e.g., `https://abcd1234.ngrok.io`).
 
@@ -149,7 +151,7 @@ docker-compose up --build
 
 - Apply the migrations:
 
-  To apply the database migrations locally (outside Docker), make sure to update your `.env` or `.env.studio` file to use `localhost` instead of the Docker hostname (`nestshop-db`) in the `DATABASE_URL`. For example:
+  To apply the database migrations locally (outside Docker), make sure to update your `.env` and `.env.studio` file to use `localhost` instead of the Docker hostname (`nestshop-db`) in the `DATABASE_URL`. For example:
 
   ```bash
   DATABASE_URL=postgresql://postgres:postgres@localhost:5432/nestshop?schema=public
