@@ -5,7 +5,7 @@ import { OrderDTO } from '../common/dto/shopify-order.dto';
 import { schema } from '../drizzle/schema';
 import { eq } from 'drizzle-orm';
 import { OrderItemDTO } from '../common/dto/shopify-order-item.dto';
-import { mapShopifyCustomerToDb, mapShopifyOrderItemToDb, mapShopifyOrderToDb } from 'src/common/mapper/shopify-order.mapper';
+import { mapShopifyCustomerToDb, mapShopifyOrderItemToDb, mapShopifyOrderToDb } from '../common/mapper/shopify-order.mapper';
 
 @Injectable()
 export class WebhooksService {
