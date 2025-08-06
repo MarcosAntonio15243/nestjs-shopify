@@ -1,5 +1,6 @@
 import { bigint, numeric, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { customers } from "./customers";
+import { stores } from "./stores";
 
 export const orders = pgTable('orders', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -26,5 +27,9 @@ export const orders = pgTable('orders', {
   shipping_province: text(),
   shipping_zip: text(),
   shipping_country: text(),
-  shipping_phone: text() 
+  shipping_phone: text() ,
+  // Store reference
+  store_id: uuid()
+    .references(() => stores.id)
+    .notNull()
 });
