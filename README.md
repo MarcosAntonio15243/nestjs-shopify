@@ -147,7 +147,8 @@ docker-compose up --build
   docker-compose up -d nestshop-db
   ```
 
-  >  **Note**: `nestshop-db` is the service name defined for the database in the `docker-compose.yml` file.
+  >  **Note**: `nestshop-db` is the service name defined for the database in the `docker-compose.yml` file. The default port for the `nesthop-db` service is `5432`, as it uses PostgreSQL.  
+  > Make sure no other service is already using this port on your machine before starting the container, otherwise it may fail to start due to a port conflict.
 
 - Apply the migrations:
 
