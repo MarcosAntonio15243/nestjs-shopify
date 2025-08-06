@@ -1,5 +1,5 @@
 {
-  "id": "13c92a36-135a-44f5-88dd-d73501f9d127",
+  "id": "cd86ff4a-b041-42a6-b90e-b4a931dbabd3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -278,6 +278,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "store_id": {
+          "name": "store_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -293,6 +299,19 @@
             "id"
           ],
           "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "orders_store_id_store_id_fk": {
+          "name": "orders_store_id_store_id_fk",
+          "tableFrom": "orders",
+          "tableTo": "store",
+          "columnsFrom": [
+            "store_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },

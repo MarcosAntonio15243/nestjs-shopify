@@ -42,7 +42,8 @@ CREATE TABLE "orders" (
 	"shipping_province" text,
 	"shipping_zip" text,
 	"shipping_country" text,
-	"shipping_phone" text
+	"shipping_phone" text,
+	"store_id" uuid NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "store" (
@@ -53,4 +54,5 @@ CREATE TABLE "store" (
 );
 --> statement-breakpoint
 ALTER TABLE "order_items" ADD CONSTRAINT "order_items_order_id_orders_id_fk" FOREIGN KEY ("order_id") REFERENCES "public"."orders"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "orders" ADD CONSTRAINT "orders_customer_id_customers_id_fk" FOREIGN KEY ("customer_id") REFERENCES "public"."customers"("id") ON DELETE set null ON UPDATE no action;
+ALTER TABLE "orders" ADD CONSTRAINT "orders_customer_id_customers_id_fk" FOREIGN KEY ("customer_id") REFERENCES "public"."customers"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "orders" ADD CONSTRAINT "orders_store_id_store_id_fk" FOREIGN KEY ("store_id") REFERENCES "public"."store"("id") ON DELETE no action ON UPDATE no action;

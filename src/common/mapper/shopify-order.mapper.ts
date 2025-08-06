@@ -8,7 +8,7 @@ import { OrderItemDTO } from "../dto/shopify-order-item.dto";
  * @param customerId Optional customer ID to associate with the order.
  * @returns An object formatted for insertion into the orders table.
  */
-export function mapShopifyOrderToDb(orderFromShopify: OrderDTO, customerId: string | null = null) {
+export function mapShopifyOrderToDb(storeId: string, orderFromShopify: OrderDTO, customerId: string | null = null) {
   return {
     id_shopify: Number(orderFromShopify.id),
     financial_status: orderFromShopify.financial_status,
@@ -32,6 +32,7 @@ export function mapShopifyOrderToDb(orderFromShopify: OrderDTO, customerId: stri
     shipping_zip: orderFromShopify.shipping_address?.zip,
     shipping_country: orderFromShopify.shipping_address?.country,
     shipping_phone: orderFromShopify.shipping_address?.phone,
+    store_id: storeId
   };
 }
 
