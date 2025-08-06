@@ -34,7 +34,7 @@ Before getting started, make sure you have:
 
 - [Node.js (>= 18.x)](https://nodejs.org)
 - [Docker and Docker Compose](https://docs.docker.com/compose/install/)
-- [[Ngrok](https://ngrok.com/) or an alternative like [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/)]  to expose your local API
+- [Ngrok](https://ngrok.com/) (or an alternative like [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/)) to expose your local API
 - A developer account on [Shopify](https://partners.shopify.com/)
 
 ## Initial Setup on Shopify
@@ -46,7 +46,7 @@ Before getting started, make sure you have:
     - Choose a name, for example: `Webhook Orders App`.
 
 3. Generate credentials:
-    - Save the **API Key** (client ID) and **API Secret** into the .env file.
+    - Save the **API Key** (Client ID) and **API Secret** into the .env file.
 
 4. Create a **test store**:
     - Go to **Stores** → **Add store** → **Create development store**.
@@ -85,7 +85,7 @@ Before running the project:
   
     - In the Shopify app dashboard:
       - Update the **App URL** and **Redirect URL** fields with this URL.
-      
+  
       > Remember to set **App URL** as `https://<ngrok-domain>/auth/shopify` and **Redirect URL** as `https://<ngrok-domain>/auth/shopify/redirect`.
 
 ## Project Configuration
@@ -154,7 +154,7 @@ docker-compose up --build
 
   To apply the database migrations locally (outside Docker), make sure to update your `.env` and `.env.studio` file to use `localhost` instead of the Docker hostname (`nestshop-db`) in the `DATABASE_URL`. For example:
 
-  ```bash
+  ```env
   DATABASE_URL=postgresql://postgres:postgres@localhost:5432/nestshop?schema=public
   ```
 
@@ -180,11 +180,14 @@ The default base URL is usually one of the following, depending on your setup:
 - Ngrok (or similar tunnel): `https://your-ngrok-subdomain.ngrok.io`
 - Custom domain: `https://your-custom-domain.com`
 
+The API endpoints are:
+
 - `GET /health` - Verifies if the API is running properly.
 - `GET /auth/shopify` - Starts the Shopify OAuth authentication flow.
 - `GET /auth/shopify/redirect` - Handles the OAuth redirect after authentication.
 - `POST /webhooks/orders/create` - Receives Shopify order creation webhooks.
 - `GET /orders` - Retrieves all saved orders with details.
+- `GET /orders/:shopDomain` - Retrieves all saved orders from a specific Shopify domain.
 
 ## Testing the Integration
 
@@ -235,6 +238,7 @@ src/
 │   └── types/            # TypeScript types related to the database
 │   ...
 ├── env/                  # Environment variable validation using zod
+├── orders/               # View information about orders saved in the system
 ├── webhooks/             # Shopify webhooks receiving and handling module
 ├── app.module.ts
 ├── main.ts
