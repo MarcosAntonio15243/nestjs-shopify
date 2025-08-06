@@ -11,7 +11,16 @@ import { mapShopifyCustomerToDb, mapShopifyOrderItemToDb, mapShopifyOrderToDb } 
 export class WebhooksService {
   constructor(@Inject(DRIZZLE) private db: DrizzleDB) {}
 
-  async saveOrder(order: OrderDTO) {
+  async saveOrder(shopDomain: string, order: OrderDTO) {
+    let shopName = shopDomain.split('.')[0];
+    let result = await this.db.select({ shopId: schema.stores.id })
+      .from(schema.stores)
+      .where(eq(schema.stores.name, shopName));
+    const { shopId } = result[0];
+    if (!shopId) {
+      throw new BadRequestException("There is no store registered with the domain name provided.");
+    }
+    
     let customer_id: string | null = null;
 
     if (order.customer) {
@@ -34,7 +43,7 @@ export class WebhooksService {
       customer_id = customer.id;
     }
     
-    const result2 = await this.db.insert(schema.orders).values(mapShopifyOrderToDb(order, customer_id)).returning();
+    const result2 = await this.db.insert(schema.orders).values(mapShopifyOrderToDb(shopId, order, customer_id)).returning();
 
     const insertedOrder = result2[0];
     if (!insertedOrder) {
