@@ -15,7 +15,7 @@ This project is an API developed using **NestJS** with **Drizzle ORM** and **Pos
 - [API Endpoints](#api-endpoints)
 - [Testing the Integration](#testing-the-integration)
 - [Supported Webhooks](#supported-webhooks)
-- [(Optional) Viewing Saved Data in the Database](#-optional-viewing-saved-data-in-the-database)
+- [(Optional) Viewing Saved Data in the Database](#optional-viewing-saved-data-in-the-database)
 - [Project Structure](#project-structure)
 
 ## Technologies Used
