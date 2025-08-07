@@ -97,13 +97,13 @@ Before running the project:
 PORT=3000 # HTTP server port
 
 # Database Connection
-DATABASE_HOST=nestshop-db         # e.g., service name in docker-compose.yml
+DATABASE_HOST=db                  # e.g., database service name in docker-compose.yml
 DATABASE_USER=postgres            # your DB username
 DATABASE_PASSWORD=postgres        # your DB password
 DATABASE_PORT=5432                # default PostgreSQL port
 DATABASE_NAME=nestshop            # your DB name
-# Format: postgresql://USER:PASSWORD@HOST:PORT/DATABASE_NAME?schema=public
-DATABASE_URL=postgresql://postgres:postgres@nestshop-db:5432/nestshop?schema=public
+# Format: postgresql://USER:PASSWORD@DATABASE_HOST:PORT/DATABASE_NAME?schema=public
+DATABASE_URL=postgresql://postgres:postgres@db:5432/nestshop?schema=public
 
 # Shopify App Credentials
 SHOPIFY_API_KEY=your_api_key_here
@@ -121,7 +121,7 @@ HOST=https://your-ngrok-subdomain.ngrok-free.app
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/nestshop?schema=public
 ```
 
-> **Note**: The URL is similar to the one in `.env`, but the `DATABASE_HOST` changes from `nestshop-db` to `localhost` so Drizzle Studio can connect locally.
+> **Note**: The URL is similar to the one in `.env`, but the `DATABASE_HOST` changes from `db` to `localhost` so Drizzle Studio can connect locally.
 
 ## Running the Project
 
@@ -144,15 +144,15 @@ docker-compose up --build
 - Start the database via Docker:
 
   ```bash
-  docker-compose up -d nestshop-db
+  docker-compose up -d db
   ```
 
-  >  **Note**: `nestshop-db` is the service name defined for the database in the `docker-compose.yml` file. The default port for the `nesthop-db` service is `5432`, as it uses PostgreSQL.  
+  >  **Note**: `db` is the service name defined for the database in the `docker-compose.yml` file. The default port for the `db` service is `5432`, as it uses PostgreSQL.  
   > Make sure no other service is already using this port on your machine before starting the container, otherwise it may fail to start due to a port conflict.
 
 - Apply the migrations:
 
-  To apply the database migrations locally (outside Docker), make sure to update your `.env` and `.env.studio` file to use `localhost` instead of the Docker hostname (`nestshop-db`) in the `DATABASE_URL`. For example:
+  To apply the database migrations locally (outside Docker), make sure to update your `.env` and `.env.studio` file to use `localhost` instead of the Docker hostname (`db`) in the `DATABASE_URL`. For example:
 
   ```env
   DATABASE_URL=postgresql://postgres:postgres@localhost:5432/nestshop?schema=public
@@ -243,7 +243,9 @@ src/
 ├── app.module.ts
 ├── main.ts
 .env
+.env.studio
 docker-compose.yml
+Dockerfile
 ```
 
 ## Author
