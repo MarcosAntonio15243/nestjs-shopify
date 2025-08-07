@@ -1,5 +1,5 @@
 {
-  "id": "13c92a36-135a-44f5-88dd-d73501f9d127",
+  "id": "304d8cd9-eae5-43bb-9cd3-4e1f25a4fce2",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -278,6 +278,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "shop_id": {
+          "name": "shop_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -294,6 +300,19 @@
           ],
           "onDelete": "set null",
           "onUpdate": "no action"
+        },
+        "orders_shop_id_shops_id_fk": {
+          "name": "orders_shop_id_shops_id_fk",
+          "tableFrom": "orders",
+          "tableTo": "shops",
+          "columnsFrom": [
+            "shop_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -302,8 +321,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.store": {
-      "name": "store",
+    "public.shops": {
+      "name": "shops",
       "schema": "",
       "columns": {
         "id": {
