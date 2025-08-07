@@ -11,7 +11,7 @@ This project is an API developed using **NestJS** with **Drizzle ORM** and **Pos
 - [Project Configuration](#project-configuration)
 - [Running the Project](#running-the-project)
   - [Option 1: Using Docker](#option-1-using-docker)
-  - [Option 2: Using Node.js/NPM](#option-2-using-nodejsnpm)
+  - [Option 2: Using Node.js/NPM (Local Development)](#option-2-using-nodejsnpm-local-development)
 - [API Endpoints](#api-endpoints)
 - [Testing the Integration](#testing-the-integration)
 - [Supported Webhooks](#supported-webhooks)
