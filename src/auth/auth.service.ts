@@ -50,14 +50,14 @@ export class AuthService {
 
     const accessToken = response.data.access_token;
 
-    // Save store name and token
-    const result = await this.db.insert(schema.stores).values({
+    // Save shop name and token
+    const result = await this.db.insert(schema.shops).values({
       name: data.shop.split('.')[0],
       access_token: accessToken
     }).returning();
 
     if (!result[0]) {
-      throw new BadRequestException("Failed to save store data on redirect");
+      throw new BadRequestException("Failed to save shop data on redirect");
     };
 
     return accessToken;

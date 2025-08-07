@@ -1,6 +1,6 @@
 services:
 
-  nestshop-db:
+  db:
     image: postgres:latest
     container_name: nestshop-postgres-db
     environment:
@@ -19,7 +19,7 @@ services:
       timeout: 5s
       retries: 5
 
-  nest-app:
+  api:
     build:
       context: .
       dockerfile: Dockerfile
@@ -29,7 +29,7 @@ services:
     ports:
       - "${PORT}:3000"
     depends_on:
-      nestshop-db:
+      db:
         condition: service_healthy
     environment:
       DATABASE_URL: ${DATABASE_URL}

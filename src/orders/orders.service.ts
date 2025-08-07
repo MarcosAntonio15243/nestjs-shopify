@@ -18,19 +18,19 @@ export class OrdersService {
 
   async getAllStoredOrderByShopDomain(shopDomain: string) {
     let shopName = shopDomain.split('.')[0];
-    let result = await this.db.select({ shopId: schema.stores.id })
-      .from(schema.stores)
-      .where(eq(schema.stores.name, shopName));
+    let result = await this.db.select({ shopId: schema.shops.id })
+      .from(schema.shops)
+      .where(eq(schema.shops.name, shopName));
     
     if (!result[0]) {
-      throw new BadRequestException("There is no store registered with the domain name provided.");
+      throw new BadRequestException("There is no shop registered with the domain name provided.");
     }
 
     const { shopId } = result[0];
 
     const orders = await this.db.select()
       .from(schema.orders)
-      .where(eq(schema.orders.store_id, shopId));
+      .where(eq(schema.orders.shop_id, shopId));
 
     const enrichedOrders = await this.getEnrichedOrders(orders);
 
