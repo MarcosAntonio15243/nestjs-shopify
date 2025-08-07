@@ -210,14 +210,14 @@ The default base URL is usually one of the following, depending on your setup:
 
 Available endpoints:
 
-| Method | Endpoint                 | Description                                                |
-|--------|--------------------------|------------------------------------------------------------|
-| GET    | /health                  | Verifies if the API is running properly.                   |
-| GET    | /auth/shopify            | Starts the Shopify OAuth authentication flow.              |
-| GET    | /auth/shopify/redirect   | Handles the OAuth redirect after authentication.           |
-| POST   | /webhooks/orders/create  | Receives Shopify order creation webhooks.                  |
-| GET    | /orders                  | Retrieves all saved orders with details.                   |
-| GET    | /orders/:shopDomain      | Retrieves all saved orders from a specific Shopify domain. |
+| Method   | Endpoint                   | Description                                                |
+|----------|----------------------------|------------------------------------------------------------|
+| `GET`    | `/health`                  | Verifies if the API is running properly.                   |
+| `GET`    | `/auth/shopify`            | Starts the Shopify OAuth authentication flow.              |
+| `GET`    | `/auth/shopify/redirect`   | Handles the OAuth redirect after authentication.           |
+| `POST`   | `/webhooks/orders/create`  | Receives Shopify order creation webhooks.                  |
+| `GET`    | `/orders`                  | Retrieves all saved orders with details.                   |
+| `GET`    | `/orders/:shopDomain`      | Retrieves all saved orders from a specific Shopify domain. |
 
 ## Testing the Integration
 
