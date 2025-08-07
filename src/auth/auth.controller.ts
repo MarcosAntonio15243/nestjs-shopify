@@ -11,7 +11,7 @@ export class AuthController {
   @Redirect() // Decorador do NestJS para lidar com redirecionamentos HTTP 302
   async authenticate(@Query('shop') shop: string) {
     if (!shop) {
-      throw new InternalServerErrorException('Shop parameter is missing. Please provide a shop name (e.g., ?shop=yourstore.myshopify.com)');
+      throw new InternalServerErrorException('Shop parameter is missing. Please provide a shop name (e.g., ?shop=yourshop.myshopify.com)');
     }
 
     const authUrl = this.authService.generateAuthUrl(shop);

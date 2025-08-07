@@ -1,10 +1,10 @@
 import { customers } from './customers';
 import { orderItems } from './orderItems';
 import { orders } from './orders';
-import { stores } from './stores';
+import { shops } from './shops';
 
 export const schema = {
-  stores,
+  shops,
   orders,
   customers,
   orderItems
